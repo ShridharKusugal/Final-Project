@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Razorpay Payment Flow - NK Automobiles</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .flow-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f6f8fb 0%, #ffffff 100%);
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .step:hover {
+            transform: translateX(10px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .step-number {
+            min-width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .step-description {
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        .step-icon {
+            font-size: 2em;
+            color: #667eea;
+        }
+
+        .arrow {
+            text-align: center;
+            color: #667eea;
+            font-size: 2em;
+            margin: -10px 0;
+        }
+
+        .features {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .feature {
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .feature-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        .feature-desc {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .security-badge {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0fdf4;
+            border: 2px solid #86efac;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .security-badge h3 {
+            color: #166534;
+            margin-bottom: 10px;
+        }
+
+        .security-badge p {
+            color: #15803d;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .step {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔐 Razorpay Payment Flow</h1>
+        <p class="subtitle">NK Automobiles - Automated Payment Verification System</p>
+
+        <div class="flow-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <div class="step-title">Customer Checkout</div>
+                    <div class="step-description">
+                        Customer fills in shipping details and selects "Pay Online (Razorpay)" as payment method.
+                        All form fields are validated before proceeding.
+                    </div>
+                </div>
+                <div class="step-icon">🛒</div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <div class="step-title">Create Razorpay Order</div>
+                    <div class="step-description">
+                        System sends request to <code>/create-razorpay-order</code> endpoint.
+                        Razorpay order is created with the total amount (including discounts).
+                        Order ID and payment details are returned.
+                    </div>
+                </div>
+                <div class="step-icon">📝</div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <div class="step-title">Payment Modal Opens</div>
+                    <div class="step-description">
+                        Razorpay checkout modal opens with multiple payment options:
+                        UPI, Credit/Debit Cards, Net Banking, and Wallets.
+                        Customer selects preferred payment method.
+                    </div>
+                </div>
+                <div class="step-icon">💳</div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <div class="step-title">Customer Pays</div>
+                    <div class="step-description">
+                        Customer completes payment using their chosen method.
+                        Razorpay processes the payment securely.
+                        Payment confirmation is received from payment provider.
+                    </div>
+                </div>
+                <div class="step-icon">✅</div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <div class="step-title">Signature Verification</div>
+                    <div class="step-description">
+                        System receives payment response with signature.
+                        <code>/verify-razorpay-payment</code> endpoint verifies signature using HMAC SHA256.
+                        Ensures payment authenticity and prevents tampering.
+                    </div>
+                </div>
+                <div class="step-icon">🔐</div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="step">
+                <div class="step-number">6</div>
+                <div class="step-content">
+                    <div class="step-title">Order Creation</div>
+                    <div class="step-description">
+                        After successful verification, order is created in database.
+                        Order status set to "Confirmed" (not "Payment Pending").
+                        Stock is updated, loyalty points awarded (1 point per ₹100).
+                        Transaction ID stored for reference.
+                    </div>
+                </div>
+                <div class="step-icon">📦</div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="step">
+                <div class="step-number">7</div>
+                <div class="step-content">
+                    <div class="step-title">Order Confirmation</div>
+                    <div class="step-description">
+                        Customer is redirected to order confirmation page.
+                        Email/SMS notifications are logged.
+                        Customer can view order details and estimated delivery date.
+                    </div>
+                </div>
+                <div class="step-icon">🎉</div>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-title">Instant Verification</div>
+                <div class="feature-desc">Automatic payment verification in seconds</div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">🔒</div>
+                <div class="feature-title">Secure Payments</div>
+                <div class="feature-desc">PCI DSS compliant, HTTPS enforced</div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">💰</div>
+                <div class="feature-title">Multiple Methods</div>
+                <div class="feature-desc">UPI, Cards, Net Banking, Wallets</div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">📱</div>
+                <div class="feature-title">Mobile Friendly</div>
+                <div class="feature-desc">Responsive design for all devices</div>
+            </div>
+        </div>
+
+        <div class="security-badge">
+            <h3>🛡️ Security Features</h3>
+            <p>
+                All payments are verified using cryptographic signatures.
+                Card details never touch your server.
+                Razorpay is PCI DSS Level 1 compliant.
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NK Automobiles - Website Flowchart</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .description {
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .mermaid {
+            margin: 0 auto;
+            max-width: 100%;
+        }
+
+        @media print {
+            .no-print {
+                display: none;
+            }
+
+            body {
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>NK Automobiles - Website User Flow</h1>
+    <p class="description">Generated on 2026-01-21</p>
+
+    <div class="no-print">
+        <p><strong>Instructions:</strong> Press <code>Ctrl + P</code> (Windows) or <code>Cmd + P</code> (Mac) and select
+            "Save as PDF" to export this diagram.</p>
+        <button onclick="window.print()"
+            style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">Save
+            as PDF</button>
+    </div>
+
+    <hr class="no-print">
+
+    <div class="mermaid">
+        graph TD
+        %% Define Styles
+        classDef public fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
+        classDef auth fill:#fff3e0,stroke:#e65100,stroke-width:2px;
+        classDef user fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px;
+        classDef admin fill:#fce4ec,stroke:#880e4f,stroke-width:2px;
+        classDef action fill:#f3e5f5,stroke:#4a148c,stroke-dasharray: 5 5;
+
+        %% Entry Points
+        Start((Start)) --> Home[Home Page]
+
+        %% Public Pages
+        subgraph Public_Area [Public Area]
+        direction TB
+        Home -->|View Products| Products[All Products]
+        Home --> About[About Us]
+        Home --> Contact[Contact Us]
+        Products -->|Filter Category| Products
+        Products -->|Click Product| ProductDetail[Product Detail]
+        ProductDetail -->|View Related| ProductDetail
+        end
+
+        %% Authentication
+        subgraph Auth_System [Authentication]
+        Login[Login Page]
+        Register[Register Page]
+        Logout(Logout)
+        end
+
+        Home -.-> Login
+        Login -- New User --> Register
+        Register -- Success --> Login
+
+        %% User Flow
+        subgraph User_Area [Customer Area]
+        Profile[User Profile]
+        Cart[Shopping Cart]
+        Checkout[Checkout Page]
+        OrderConf[Order Confirmation]
+
+        ProductDetail -->|Add Review| ReviewAction(Submit Review):::action
+        ProductDetail -->|Add to Cart| Cart
+        Cart -->|Buy Now| Checkout
+        Checkout -->|Place Order| OrderConf
+        Profile -->|View History| OrderConf
+        end
+
+        %% Admin Flow
+        subgraph Admin_Panel [Admin Dashboard]
+        AdminDash[Admin Dashboard]
+
+        subgraph Admin_Products [Products]
+        AdmProducts[Product List]
+        AdmProdAdd[Add Product]
+        AdmProdEdit[Edit Product]
+        end
+
+        subgraph Admin_Orders [Orders]
+        AdmOrders[Order List]
+        AdmOrderDetail[Order Detail]
+        end
+
+        subgraph Admin_Users [Users]
+        AdmUsers[User List]
+        AdmUserEdit[Edit User Role]
+        end
+
+        subgraph Admin_Cats [Categories]
+        AdmCats[Category List]
+        AdmCatForm[Add/Edit Category]
+        end
+
+        AdminDash --> AdmProducts
+        AdminDash --> AdmOrders
+        AdminDash --> AdmUsers
+        AdminDash --> AdmCats
+
+        AdmProducts --> AdmProdAdd
+        AdmProducts --> AdmProdEdit
+        AdmOrders --> AdmOrderDetail
+        AdmUsers --> AdmUserEdit
+        AdmCats --> AdmCatForm
+        end
+
+        %% Access Control Connections
+        Login -->|Role: Customer| Home
+        Login -->|Role: Admin| AdminDash
+        Logout --> Login
+
+        %% Cross-Functional Links
+        ReviewAction -.-> ProductDetail
+
+        %% Apply Styles
+        class Home,Products,ProductDetail,About,Contact public;
+        class Login,Register,Logout auth;
+        class Profile,Cart,Checkout,OrderConf user;
+        class
+        AdminDash,AdmProducts,AdmOrders,AdmUsers,AdmCats,AdmProdAdd,AdmProdEdit,AdmOrderDetail,AdmUserEdit,AdmCatForm
+        admin;
+    </div>
+</body>
+
+</html>
